@@ -16,3 +16,5 @@
 *.exe
 *.out
 *.app
+/Tree/build/
+/Tree/dist/
