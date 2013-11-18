@@ -38,7 +38,7 @@ extern "C" {
 
     typedef struct tree {
         BinaryNodePtr root;
-        BinaryNodePtr current; // creates 
+        BinaryNodePtr current;
     } BinaryTree, *Tree;
 
     /*PROTOTYPES*/
@@ -47,10 +47,12 @@ extern "C" {
     bool isLeaf(BinaryNodePtr);
     Tree initBinaryTree(void);
     void fill_root(Tree, BinaryNodePtr);
-    void add(Tree, BinaryNodePtr, int);
-    int height(Tree T);
-    int numNodes(Tree T);
-    int numLeaves(Tree T);
+    void add(BinaryNodePtr, int, BinaryNodePtr);
+    int height(BinaryNodePtr);
+    int numNodes(BinaryNodePtr);
+    int numLeaves(BinaryNodePtr);
+
+    int getData();
 
     /*FUNCTIONS*/
 
@@ -101,18 +103,14 @@ extern "C" {
         }
     }
 
-    /*Add a leaf to the node given in the tree*/
-    void add(Tree T, BinaryNodePtr node, int l_or_r, NodeData data) {
-
-        if (node->left == NULL && l_or_r == 1) { // add right leaf
-            BinaryNodePtr addNode = (BinaryNodePtr) malloc(sizeof (BinaryNode)); // allocate new space for new leaf
-            addNode->data = data; // add data to new node
-            node->left = addNode; // add node to tree
+    /*Add a leaf to the node given in the tree (No memory allocation)*/
+    void add(BinaryNodePtr node, int l_or_r, BinaryNodePtr data) {
+        // 1 = ADD TO RIGHT   0 = ADD TO LEFT
+        if (node->left == NULL && l_or_r == 0) { // add right leaf            
+            node->left = data; // add node to tree
         } else {
-            if (node->right == NULL && l_or_r == 0) { // add left leaf
-                BinaryNodePtr addNode = (BinaryNodePtr) malloc(sizeof (BinaryNode)); // allocate new space for new leaf
-                addNode ->data = data; // add data to node
-                node->right = addNode; // add node to tree
+            if (node->right == NULL && l_or_r == 1) { // add left leaf               
+                node->right = data; // add node to tree
             }
         }
 
@@ -121,24 +119,78 @@ extern "C" {
 #define max(a,b) ((a)>(b)?(a):(b))
 
     /* Returns the hight of the tree */
-    int height(Tree T) {
-        if (T->current == NULL) return 0;
-        return 1 + max(height(T->root->left) + height(T->root->right));
+    int height(BinaryNodePtr root) {
+        if (root == NULL) return 0;
+        return 1 + max(height(root->left), height(root->right));
 
     }
 
     /*Returns the total number of nodes in the tree */
-    int numNodes(Tree T) {
-        if (T->current == NULL)return 0;
-        return 1 + numNodes(T->root->left) + numNodes(T->root->right);
+    int numNodes(BinaryNodePtr root) {
+        if (root == NULL)return 0;
+        return 1 + numNodes(root->left) + numNodes(root->right);
 
     }
 
-    int numLeaves(Tree T) {
-        if (T->current == NULL)return 0;
-        if (T->root->left == NULL && T->root->right == NULL) return 1;
-        return numLeaves(T->root->left)+(T->root->right);
+    int numLeaves(BinaryNodePtr root) {
+        if (root == NULL)return 0;
+        if (root->left == NULL && root->right == NULL) return 1;
+        return numLeaves(root->left) + numLeaves(root->right);
     }
+
+#define NAMESIZE 80
+
+    /*Gets data from the user and returns a 1 or 0 depending on a yes no response*/
+    int getData() {
+        char *response = (char*) malloc(sizeof (char)*NAMESIZE); // allocate new memory        
+        size_t responseSize = sizeof (response);
+        int bytes_read = 1;
+
+        printf("compare 'y': %d\n", strcmp(response, "y"));
+        printf("compare 'n': %d\n", strcmp(response, "n"));
+        printf("compare 'yes': %d\n", strcmp(response, "yes"));
+        printf("compare 'no': %d\n", strcmp(response, "no"));
+
+        // IF STRING IS WRONG, LOOP UNTIL IT IS CORRECT
+        int runs = 0;
+        while (1) {
+            if (strcmp(response, "y") == 0 || strcmp(response, "n") == 0 || strcmp(response, "yes") == 0 || strcmp(response, "no") == 0 || runs < 1) {
+                // GET STRING
+                printf("(y/n) -> ");
+                bytes_read = getline(&response, &responseSize, stdin);
+                if (bytes_read == -1) {
+                    // a stream issue has occured,
+                    printf("INPUT ERROR.\n");
+                    exit(1);
+                } else {
+                    strtok(response, "\n"); // remove the endline token from the input string
+                }
+                
+                // check conditional
+                if (strcmp(response, "y") == 0 || strcmp(response, "n") == 0 || strcmp(response, "yes") == 0 || strcmp(response, "no") == 0)
+                    break;
+
+            } else {
+                break; // break out of infinite loop
+            }
+
+            printf("compare 'y': %d\n", strcmp(response, "y"));
+            printf("compare 'n': %d\n", strcmp(response, "n"));
+            printf("compare 'yes': %d\n", strcmp(response, "yes"));
+            printf("compare 'no': %d\n", strcmp(response, "no"));
+
+            runs++;
+        }
+
+        // based on valid input return a value
+        if (strcmp(response, "y") == 0 || strcmp(response, "yes") == 0) {
+            return 1;
+        } else {
+            return 0;
+        }
+
+    }
+
 
 
 
