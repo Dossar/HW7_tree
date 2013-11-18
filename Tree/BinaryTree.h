@@ -25,7 +25,7 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
-#define max(a,b) ((a)>(b)?(a):(b))
+
 
     // This is for an individual node, containing node data and pointer to left and right children.
 
@@ -38,7 +38,7 @@ extern "C" {
 
     typedef struct tree {
         BinaryNodePtr root;
-        BinaryNodePtr current;
+        BinaryNodePtr current; // creates 
     } BinaryTree, *Tree;
 
     /*PROTOTYPES*/
@@ -89,22 +89,45 @@ extern "C" {
         }
     }
 
-    /*Fill the root value with the values given*/
-    void fill_root(Tree T, BinaryNodePtr node) {
+    /* sets the root value at the top of the tree. only if root is null */
+    void make_root(Tree T, NodeData data) {
+        if (T->root == NULL) {
+            BinaryNodePtr node = (BinaryNodePtr) malloc(sizeof (BinaryNode)); // allocate new space for root node
+            node->data = data;
+            T->root = node;
+        } else {
+            printf("\nroot exists already.");
+            exit(0); // exit program
+        }
+    }
+
+    /*Add a leaf to the node given in the tree*/
+    void add(Tree T, BinaryNodePtr node, int l_or_r, NodeData data) {
+
+        if (node->left == NULL && l_or_r == 1) { // add right leaf
+            BinaryNodePtr addNode = (BinaryNodePtr) malloc(sizeof (BinaryNode)); // allocate new space for new leaf
+            addNode->data = data; // add data to new node
+            node->left = addNode; // add node to tree
+        } else {
+            if (node->right == NULL && l_or_r == 0) { // add left leaf
+                BinaryNodePtr addNode = (BinaryNodePtr) malloc(sizeof (BinaryNode)); // allocate new space for new leaf
+                addNode ->data = data; // add data to node
+                node->right = addNode; // add node to tree
+            }
+        }
 
     }
 
-    /*Add a leaf to a give position in the tree*/
-    void add(Tree T, BinaryNodePtr node, int left_or_right) {
+#define max(a,b) ((a)>(b)?(a):(b))
 
-    }
-
+    /* Returns the hight of the tree */
     int height(Tree T) {
         if (T->current == NULL) return 0;
         return 1 + max(height(T->root->left) + height(T->root->right));
 
     }
 
+    /*Returns the total number of nodes in the tree */
     int numNodes(Tree T) {
         if (T->current == NULL)return 0;
         return 1 + numNodes(T->root->left) + numNodes(T->root->right);

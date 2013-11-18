@@ -31,8 +31,31 @@ typedef struct {
 
 #include "BinaryTree.h"
 
+void makeDecisionTree(BinaryTree* T);
+void play(BinaryTree* T);
+void learn(BinaryTree* T);
+
 int main(int argc, char** argv) {
+
+
+    // DO STUFF.
+    
+    
 
     return (EXIT_SUCCESS);
 }
 
+/* Creates a hardcoded binary tree with the base set of questions and answers. */
+void makeDecisionTree(BinaryTree* T) {
+
+}
+
+/* Simulates one round of the game */
+void play(BinaryTree* T) {
+
+}
+
+/* This is optional. Creates an add node to tree to "learn" from the user. */
+void learn(BinaryTree* T) {
+
+}
