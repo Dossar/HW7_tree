@@ -77,8 +77,8 @@ void makeDecisionTree(Tree T) {
     make_root(T, rootNode->data); // add root node
     add(T->root, 0, LRoot_Node1); // add yes to root question
     add(T->root, 1, RRoot_Node2); // add no to root question
-    add(RRoot_Node2, 0, LNode2_Node3); // add yes to Node2 question
-    add(RRoot_Node2, 1, RNode2_Node4); // add no to Node2 question
+    add(RRoot_Node2, 1, LNode2_Node3); // add yes to Node2 question
+    add(RRoot_Node2, 0, RNode2_Node4); // add no to Node2 question
 
 }
 
@@ -92,17 +92,24 @@ void play(Tree T) {
     // start gameplay from the top of the tree so
     T->current = T->root;
 
-    printf("RETURN VALUE: %d\n", getData());
+    //printf("RETURN VALUE: %d\n", getData());
 
-    // loop until we encounter a leaf
-    //    while (!isLeaf(T->current)) {
-    //        printf("%s\n", T->current->data.Question); // print the question
-    //        if (getData()) {
-    //
-    //            // stuff
-    //
-    //        }
-    //    }
+    //loop until we encounter a leaf
+    while (!isLeaf(T->current)) { // loop while our current position is not a leaf.
+        printf("%s\n", T->current->data.Question); // print the question
+        if (getData()) {
+            // if answered yes
+            T->current = T->current->left; // move current to the left or yes value
+        } else {
+            // if answered no
+            T->current = T->current->right; // move current
+        }
+    }
+
+
+    // print the leaf question data (the answer)    
+    printf("%s\n", T->current->data.Question);
+    
 
 }
 

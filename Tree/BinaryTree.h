@@ -144,42 +144,28 @@ extern "C" {
     int getData() {
         char *response = (char*) malloc(sizeof (char)*NAMESIZE); // allocate new memory        
         size_t responseSize = sizeof (response);
-        int bytes_read = 1;
+        int bytes_read = 1;       
 
-        printf("compare 'y': %d\n", strcmp(response, "y"));
-        printf("compare 'n': %d\n", strcmp(response, "n"));
-        printf("compare 'yes': %d\n", strcmp(response, "yes"));
-        printf("compare 'no': %d\n", strcmp(response, "no"));
-
-        // IF STRING IS WRONG, LOOP UNTIL IT IS CORRECT
-        int runs = 0;
+        // IF STRING IS WRONG, LOOP UNTIL IT IS CORRECT        
         while (1) {
-            if (strcmp(response, "y") == 0 || strcmp(response, "n") == 0 || strcmp(response, "yes") == 0 || strcmp(response, "no") == 0 || runs < 1) {
-                // GET STRING
-                printf("(y/n) -> ");
-                bytes_read = getline(&response, &responseSize, stdin);
-                if (bytes_read == -1) {
-                    // a stream issue has occured,
-                    printf("INPUT ERROR.\n");
-                    exit(1);
-                } else {
-                    strtok(response, "\n"); // remove the endline token from the input string
-                }
-                
-                // check conditional
-                if (strcmp(response, "y") == 0 || strcmp(response, "n") == 0 || strcmp(response, "yes") == 0 || strcmp(response, "no") == 0)
-                    break;
 
+            // GET STRING
+            printf("(y/n) -> ");
+            bytes_read = getline(&response, &responseSize, stdin);
+            if (bytes_read == -1) {
+                // a stream issue has occured,
+                printf("INPUT ERROR.\n");
+                exit(1);
             } else {
-                break; // break out of infinite loop
+                strtok(response, "\n"); // remove the endline token from the input string
             }
 
-            printf("compare 'y': %d\n", strcmp(response, "y"));
-            printf("compare 'n': %d\n", strcmp(response, "n"));
-            printf("compare 'yes': %d\n", strcmp(response, "yes"));
-            printf("compare 'no': %d\n", strcmp(response, "no"));
-
-            runs++;
+            if (strcmp(response, "y") == 0 || strcmp(response, "n") == 0 || strcmp(response, "yes") == 0 || strcmp(response, "no") == 0) {
+                break;
+            } else {
+                *response = 0; // reset string
+                continue;
+            }           
         }
 
         // based on valid input return a value
