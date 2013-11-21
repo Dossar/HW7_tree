@@ -148,6 +148,7 @@ extern "C" {
 
         // IF STRING IS WRONG, LOOP UNTIL IT IS CORRECT        
         while (1) {
+            
 
             // GET STRING
             printf("(y/n) -> ");
@@ -160,8 +161,8 @@ extern "C" {
                 strtok(response, "\n"); // remove the endline token from the input string
             }
 
-            if (strcmp(response, "y") == 0 || strcmp(response, "n") == 0 || strcmp(response, "yes") == 0 || strcmp(response, "no") == 0) {
-                break;
+            if (strcmp(response, "y") == 0 || strcmp(response, "n") == 0 || strcmp(response, "yes") == 0 || strcmp(response, "no") == 0) {                
+                break;                
             } else {
                 *response = 0; // reset string
                 continue;
@@ -170,8 +171,10 @@ extern "C" {
 
         // based on valid input return a value
         if (strcmp(response, "y") == 0 || strcmp(response, "yes") == 0) {
+            *response = 0; // reset string           
             return 1;
         } else {
+            *response = 0; // reset string            
             return 0;
         }
 
